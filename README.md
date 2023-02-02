@@ -7,7 +7,9 @@
 
 We have 2 databases : (1) php_login_management and (2) php_login_management_test
 
-Database (1) is original based for raw data, while database (2) is replica from database (1) that contains dirty raw data for used testing
+Database (1) is original based for raw data, while database (2) is
+replica from database (1) that contains dirty raw data
+for used testing
 
 ```sql
 CREATE DATABASE php_login_management;
@@ -147,6 +149,51 @@ PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
 Time: 00:00.067, Memory: 4.00 MB
 
 OK (1 test, 1 assertion)
+```
+
+## Repository
+
+This architecture uses the MVC architecture and is combined with the Repository Pattern to avoid overwhelming logic in the MVC Controller. The Controller will call the Service, the Service
+will call the Repository, and the Repository will retrieve data from the Domain and
+directly access the database
+
+### Domain
+
+The Domain represents the table data in the database.
+
+```php
+class User
+{
+    private string $id;
+    private string $name;
+    private string $password;
+
+    // SETTER AND GETTER
+    public function getId(): string
+    {
+        return $this->id;
+    }
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+}
 ```
 
 ### Built By
