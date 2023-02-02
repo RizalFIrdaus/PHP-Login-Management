@@ -470,7 +470,7 @@ The Controller is handled by the UserController that implements some methods suc
 
 ### Testing User Controller
 
-This testing runs three methods: view index ,store success,store null, store failed, and store duplicate ID
+This testing runs five scenario: view index ,store success,store null, store failed, and store duplicate ID
 
 ```php
  public function testRegister()
