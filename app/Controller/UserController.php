@@ -16,7 +16,7 @@ class UserController
 
     public function __construct()
     {
-        $connection = Database::getConnection("prod");
+        $connection = Database::getConnection();
         $repository = new UserRepository($connection);
         $this->userService = new UserRegistrationService($repository);
     }
@@ -37,7 +37,7 @@ class UserController
 
         try {
             $this->userService->register($request);
-            Redirect::to("/users/login");
+            // Redirect::to("/users/login");
         } catch (ValidationException $exception) {
             View::render("User/register", [
                 "title" => "Register User",
