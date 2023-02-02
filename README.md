@@ -298,6 +298,68 @@ Time: 00:00.033, Memory: 4.00 MB
 OK (2 tests, 3 assertions)
 ```
 
+## Service
+
+The Service is the centralized business logic. The Service will call the Repository to use available methods. The Repository calls the Domain and is directly connected to the database.
+
+### Registration Service
+
+The registration method will validate incoming requests, which will be handled by the validationUserRegistrationRequest. If it passes the registration stage, it will then
+check if the request ID has already been created. If it has, it will give an
+exception, otherwise, a new user will be created. This method will provide a
+response in the form of user data by creating a UserRegistrationResponse
+model, while the UserRegistrationRequest will handle the incoming
+request in the user registration request
+
+```php
+ public function register(UserRegistrationRequest $request): UserRegistrationResponse
+    {
+        // Validation
+        $this->validationUserRegistrationRequest($request);
+
+        try {
+            Database::beginTransaction();
+            $user = $this->userRepository->getById($request->id);
+            // Checking if user already exist
+            if ($user != null) {
+                throw new ValidationException("Id $request->id already exist !");
+            }
+            // Create new user if id ready to save
+            $user = new User();
+            $user->setId($request->id);
+            $user->setName($request->name);
+            $user->setPassword(password_hash($request->password, PASSWORD_BCRYPT));
+            $this->userRepository->save($user);
+
+            // Return response
+            $response = new UserRegistrationResponse();
+            $response->user = $user;
+            return $response;
+
+            Database::commitTransaction();
+        } catch (\Exception $exception) {
+            Database::rollbackTransaction();
+            throw $exception;
+        }
+    }
+```
+
+validationUserRegistrationRequest
+
+```php
+public function validationUserRegistrationRequest(UserRegistrationRequest $request)
+    {
+        if (
+            $request->id == null || $request->name == null || $request->password == null ||
+            trim($request->id) == "" || trim($request->name) == "" || trim($request->password) == ""
+        ) {
+            throw new ValidationException("Id,name or password can't blank", 403);
+        } else if (strlen($request->id) <= 6 || strlen($request->password) <= 8) {
+            throw new ValidationException("Id can't less then 6 or Password can't less then 8", 403);
+        }
+    }
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
