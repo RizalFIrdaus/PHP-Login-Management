@@ -26,10 +26,10 @@ class UserRepository
         return $user;
     }
 
-    public function getById(User $user): ?User
+    public function getById(string $id): ?User
     {
         $statement = $this->connection->prepare("SELECT id,name,password FROM users WHERE id=?");
-        $statement->execute([$user->getId()]);
+        $statement->execute([$id]);
 
         // Trying to fetch data from id
         try {
@@ -50,6 +50,6 @@ class UserRepository
 
     public function deleteAll(): void
     {
-        $this->connection->exec("DELETE * FROM users");
+        $this->connection->exec("DELETE FROM users");
     }
 }
