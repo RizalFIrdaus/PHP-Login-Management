@@ -122,6 +122,21 @@ Templating is used to separate the header and footer for clean code in the visua
     }
 ```
 
+### Testing View
+
+This testing will check the expected regex displayed on the website page.
+
+```php
+    public function testRender()
+    {
+        View::render("Home/index", [
+            "title" => "Login"
+        ]);
+        self::expectOutputRegex("[Login]");
+        self::expectOutputRegex("[Register]");
+    }
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
