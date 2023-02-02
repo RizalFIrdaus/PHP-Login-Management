@@ -31,14 +31,20 @@ class UserRepository
         $statement = $this->connection->prepare("SELECT id,name,password FROM users WHERE id=?");
         $statement->execute([$user->getId()]);
 
-        if ($row = $statement->fetch()) {
-            $user = new User();
-            $user->setId($row["id"]);
-            $user->setName($row["name"]);
-            $user->setPassword($row["password"]);
-            return $user;
-        } else {
-            return null;
+        // Trying to fetch data from id
+        try {
+            if ($row = $statement->fetch()) {
+                $user = new User();
+                $user->setId($row["id"]);
+                $user->setName($row["name"]);
+                $user->setPassword($row["password"]);
+                return $user;
+            } else {
+                return null;
+            }
+        } finally {
+            // Close Query
+            $statement->closeCursor();
         }
     }
 }
