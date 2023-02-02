@@ -137,6 +137,18 @@ This testing will check the expected regex displayed on the website page.
     }
 ```
 
+The Result
+
+```shell
+PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
+
+.                                                                   1 / 1 (100%)
+
+Time: 00:00.067, Memory: 4.00 MB
+
+OK (1 test, 1 assertion)
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
