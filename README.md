@@ -360,6 +360,65 @@ public function validationUserRegistrationRequest(UserRegistrationRequest $reque
     }
 ```
 
+### Testing User Service
+
+This testing runs three methods: success, failed, and duplicate ID
+
+```php
+public function testServiceSuccess()
+    {
+        $request = new UserRegistrationRequest();
+        $request->id = "rizal300500";
+        $request->name = "Rizal";
+        $request->password = "rahasia123";
+        $response = $this->userService->register($request);
+        // Checking response not null
+        self::assertNotNull($response);
+        // Checking request id equals response id
+        self::assertEquals($request->id, $response->user->getId());
+        // Verify hashing password
+        self::assertTrue(password_verify($request->password, $response->user->getPassword()));
+    }
+    public function testServiceFailed()
+    {
+        $this->expectException(ValidationException::class);
+        $request = new UserRegistrationRequest();
+        $request->id = "";
+        $request->name = "";
+        $request->password = "";
+        $this->userService->register($request);
+    }
+
+    public function testServiceDuplicate()
+    {
+        $user = new User();
+        $user->setId("esan300500");
+        $user->setName("Rizal");
+        $user->setPassword("rahasia123");
+        $this->repository->save($user);
+
+        $this->expectException(ValidationException::class);
+
+        $request = new UserRegistrationRequest();
+        $request->id = "esan300500";
+        $request->name = "Rizal";
+        $request->password = "rahasia123";
+        $this->userService->register($request);
+    }
+```
+
+The Result
+
+```shell
+PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
+
+...                                                                 3 / 3 (100%)
+
+Time: 00:00.191, Memory: 4.00 MB
+
+OK (3 tests, 5 assertions)
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
