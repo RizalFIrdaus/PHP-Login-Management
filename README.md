@@ -109,6 +109,19 @@ Time: 00:00.054, Memory: 4.00 MB
 OK (2 tests, 2 assertions)
 ```
 
+## View Templating
+
+Templating is used to separate the header and footer for clean code in the visual aspect. By separating the header, footer, and body, we only need to import the header and footer while the body is always changing
+
+```php
+    public static function render(string $view, $model)
+    {
+        require __DIR__ . "/../View/Layouts/header.php";
+        require __DIR__ . '/../View/' . $view . '.php';
+        require __DIR__ . "/../View/Layouts/footer.php";
+    }
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
