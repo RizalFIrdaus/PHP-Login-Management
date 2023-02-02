@@ -25,4 +25,20 @@ class UserRepository
         ]);
         return $user;
     }
+
+    public function getById(User $user): ?User
+    {
+        $statement = $this->connection->prepare("SELECT id,name,password FROM users WHERE id=?");
+        $statement->execute([$user->getId()]);
+
+        if ($row = $statement->fetch()) {
+            $user = new User();
+            $user->setId($row["id"]);
+            $user->setName($row["name"]);
+            $user->setPassword($row["password"]);
+            return $user;
+        } else {
+            return null;
+        }
+    }
 }
