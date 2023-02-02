@@ -1,11 +1,11 @@
 {
-    "name": "programmer-zaman-now/belajar-php-mvc",
-    "description": "Belajar PHP MVC",
+    "name": "rizal/management-login",
+    "description": "Management Login MVC",
     "type": "project",
     "authors": [
         {
-            "name": "Eko Kurniawan Khannedy",
-            "email": "echo.khannedy@gmail.com"
+            "name": "Muhammad Rizal Firdaus",
+            "email": "rizal.firdaus117@gmail.com"
         }
     ],
     "require": {
