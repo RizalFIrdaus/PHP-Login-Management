@@ -24,15 +24,15 @@ class Database
         return self::$pdo;
     }
 
-    public static function beginTransaction()
+    public static function beginTrans()
     {
         self::$pdo->beginTransaction();
     }
-    public static function commitTransaction()
+    public static function commitTrans()
     {
         self::$pdo->commit();
     }
-    public static function rollbackTransaction()
+    public static function rollbackTrans()
     {
         self::$pdo->rollBack();
     }

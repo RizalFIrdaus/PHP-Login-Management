@@ -2,11 +2,13 @@
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\Service;
 
+use ProgrammerZamanNow\Belajar\PHP\MVC\Config\Database;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
+
 
 class UserRegistrationService
 {
@@ -24,7 +26,7 @@ class UserRegistrationService
         $this->validationUserRegistrationRequest($request);
 
         try {
-            Database::beginTransaction();
+            Database::beginTrans();
             $user = $this->userRepository->getById($request->id);
             // Checking if user already exist
             if ($user != null) {
@@ -40,11 +42,10 @@ class UserRegistrationService
             // Return response
             $response = new UserRegistrationResponse();
             $response->user = $user;
+            Database::commitTrans();
             return $response;
-
-            Database::commitTransaction();
         } catch (\Exception $exception) {
-            Database::rollbackTransaction();
+            Database::rollbackTrans();
             throw $exception;
         }
     }
