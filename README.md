@@ -21,7 +21,9 @@
   - [Service](#service)
     - [Registration Service](#registration-service)
     - [Testing User Service](#testing-user-service)
-  - [UserController](#service)
+  - [User Controller](#user-controller)
+    - [User Controller Method](#user-controller)
+    - [Testing User Controller](#testing-user-controller)
 
 ## Structure Database
 
@@ -441,9 +443,7 @@ OK (3 tests, 5 assertions)
 
 ## User Controller
 
-The Controller has been handled by UserController that implement some method such as
-index method that centralized the route index and pass it get method, otherwise store method
-that centralized the route store and pass it post method to store data from client
+The Controller is handled by the UserController that implements some methods such as the index method, which centralizes the index route and passes it the get method, and the store method, which centralizes the store route and passes it the post method to store data from the client.
 
 ```php
  public function store()
