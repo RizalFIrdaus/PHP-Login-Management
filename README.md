@@ -33,6 +33,54 @@ REFERENCES users(id);
 
 MVC - Repository Pattern
 
+## Database GetConection
+
+The creation of getConnection uses a singleton architecture, which means creating an object once and using it multiple times. The getConnection function will accept a "prod" or "test" parameter. The default is set to "test"
+
+### Env
+
+```php
+
+function getDataConfig(): array
+{
+    return [
+        "database" => [
+            "prod" => [
+                "url" => "mysql:host=localhost:3306;dbname=php_login_management",
+                "username" => "root",
+                "password" => ""
+            ],
+            "test" => [
+                "url" => "mysql:host=localhost:3306;dbname=php_login_management_test",
+                "username" => "root",
+                "password" => ""
+            ]
+        ]
+    ];
+}
+```
+
+### getConnection Function
+
+```php
+public static function getConnection(string $env = "test"): \PDO
+    {
+        // Singleton architecture (User single to many action)
+        // if pdo null then create new db if not .. just return back pdo had been created
+        if (self::$pdo == null) {
+            // create new database
+            require_once __DIR__ . "/../../env/database.php";
+            $config = getDataConfig();
+            self::$pdo = new PDO(
+                $config["database"][$env]["url"],
+                $config["database"][$env]["username"],
+                $cofing["database"][$env]["password"]
+            );
+        }
+        return self::$pdo;
+    }
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
