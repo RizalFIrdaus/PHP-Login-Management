@@ -47,4 +47,9 @@ class UserRepository
             $statement->closeCursor();
         }
     }
+
+    public function deleteAll(): void
+    {
+        $this->connection->exec("DELETE * FROM users");
+    }
 }
