@@ -2,6 +2,8 @@
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\Config;
 
+use PDO;
+
 class Database
 {
     private static ?\PDO $pdo = null;
@@ -16,7 +18,7 @@ class Database
             self::$pdo = new PDO(
                 $config["database"][$env]["url"],
                 $config["database"][$env]["username"],
-                $cofing["database"][$env]["password"]
+                $config["database"][$env]["password"]
             );
         }
         return self::$pdo;

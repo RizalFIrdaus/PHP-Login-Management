@@ -81,6 +81,34 @@ public static function getConnection(string $env = "test"): \PDO
     }
 ```
 
+### Testing Connection
+
+During testing, two data connection tests will be performed to ensure that the data is not null and to verify that the implemented singleton architecture is functioning properly.
+
+```php
+    public function testConnection()
+    {
+        $connection = Database::getConnection();
+        self::assertNotNull($connection);
+    }
+
+    public function testSingletonDatabase()
+    {
+        $con1 = Database::getConnection();
+        $con2 = Database::getConnection();
+        self::assertSame($con1, $con2);
+    }
+```
+
+The Result
+
+```shell
+    PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
+..                                                                  2 / 2 (100%)
+Time: 00:00.054, Memory: 4.00 MB
+OK (2 tests, 2 assertions)
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
