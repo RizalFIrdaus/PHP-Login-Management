@@ -468,6 +468,74 @@ that centralized the route store and pass it post method to store data from clie
     }
 ```
 
+### Testing User Controller
+
+This testing runs three methods: view index ,store success,store null, store failed, and store duplicate ID
+
+```php
+ public function testRegister()
+    {
+        $this->userController->index();
+        $this->expectOutputRegex("[Register]");
+        $this->expectOutputRegex("[Muhammad Rizal Firdaus]");
+        $this->expectOutputRegex("[Name]");
+        $this->expectOutputRegex("[Id]");
+        $this->expectOutputRegex("[Password]");
+    }
+
+    public function testStoreRegisterSuccess()
+    {
+        $_POST["id"] = "rizal300500";
+        $_POST["name"] = "rizal";
+        $_POST["password"] = "rahasia12345";
+        $this->userController->store();
+        $this->expectOutputRegex("[]");
+    }
+
+    public function testStoreRegisterFailedBlank()
+    {
+        $_POST["id"] = "";
+        $_POST["name"] = "";
+        $_POST["password"] = "";
+        $this->userController->store();
+        $this->expectOutputRegex("[Id,name or password can't blank]");
+    }
+
+    public function testStoreRegisterFailedNull()
+    {
+        $this->userController->store();
+        $this->expectOutputRegex("[Id,name or password can't blank]");
+    }
+
+    public function testStoreRegisterDuplicate()
+    {
+        $user = new User();
+        $user->setId("rizal300500");
+        $user->setName("Rizal");
+        $user->setPassword("rahasia12345");
+        $this->repository->save($user);
+
+
+        $_POST["id"] = "rizal300500";
+        $_POST["name"] = "Rizal";
+        $_POST["password"] = "rahasia12345";
+        $this->userController->store();
+        $this->expectOutputRegex("[Id rizal300500 already exist !]");
+    }
+```
+
+The Result
+
+```shell
+PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
+
+.....                                                               5 / 5 (100%)
+
+Time: 00:00.116, Memory: 4.00 MB
+
+OK (5 tests, 5 assertions)
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
