@@ -29,7 +29,9 @@ REFERENCES users(id);
 
 ```
 
-## Connect Database
+## Architecture Software
+
+MVC - Repository Pattern
 
 ### Built By
 
