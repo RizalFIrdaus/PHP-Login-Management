@@ -196,6 +196,108 @@ class User
 }
 ```
 
+### User Repository
+
+The User Repository has several methods such as save for saving data into the database, getById for retrieving data based on Id, and deleteAll for testing purposes
+
+```php
+class UserRepository
+{
+    private \PDO $connection;
+
+    public function __construct(\PDO $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    // Save user into database
+    public function save(User $user): User
+    {
+        $statement = $this->connection->prepare("INSERT INTO users(id,name,password) VALUES (?,?,?)");
+        $statement->execute([
+            $user->getId(),
+            $user->getName(),
+            $user->getPassword()
+        ]);
+        return $user;
+    }
+
+    public function getById(string $id): ?User
+    {
+        $statement = $this->connection->prepare("SELECT id,name,password FROM users WHERE id=?");
+        $statement->execute([$id]);
+
+        // Trying to fetch data from id
+        try {
+            if ($row = $statement->fetch()) {
+                $user = new User();
+                $user->setId($row["id"]);
+                $user->setName($row["name"]);
+                $user->setPassword($row["password"]);
+                return $user;
+            } else {
+                return null;
+            }
+        } finally {
+            // Close Query
+            $statement->closeCursor();
+        }
+    }
+
+    public function deleteAll(): void
+    {
+        $this->connection->exec("DELETE FROM users");
+    }
+}
+
+```
+
+### Testing User Repository
+
+Testing the User Repository will check if method user has saved data into the database and
+the second one will check if method getById is null
+
+```php
+    private UserRepository $userRepository;
+    public function setUp(): void
+    {
+        $this->userRepository = new UserRepository(Database::getConnection());
+        $this->userRepository->deleteAll();
+    }
+
+    public function testSaveSuccess()
+    {
+        $user = new User();
+        $user->setId("rizal");
+        $user->setName("rizal");
+        $user->setPassword("rahasia");
+
+        $this->userRepository->save($user);
+        $result = $this->userRepository->getById($user->getId());
+        self::assertNotNull($result);
+        self::assertEquals($user->getId(), $result->getId());
+    }
+
+    public function testIdNotFound()
+    {
+        $user = $this->userRepository->getById("awdawd");
+        self::assertNull($user);
+    }
+
+```
+
+The Result
+
+```shell
+PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
+
+..                                                                  2 / 2 (100%)
+
+Time: 00:00.033, Memory: 4.00 MB
+
+OK (2 tests, 3 assertions)
+```
+
 ### Built By
 
 Muhammad Rizal Firdaus
