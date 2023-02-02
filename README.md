@@ -21,6 +21,7 @@
   - [Service](#service)
     - [Registration Service](#registration-service)
     - [Testing User Service](#testing-user-service)
+  - [UserController](#service)
 
 ## Structure Database
 
@@ -436,6 +437,35 @@ PHPUnit 9.5.8 by Sebastian Bergmann and contributors.
 Time: 00:00.191, Memory: 4.00 MB
 
 OK (3 tests, 5 assertions)
+```
+
+## User Controller
+
+The Controller has been handled by UserController that implement some method such as
+index method that centralized the route index and pass it get method, otherwise store method
+that centralized the route store and pass it post method to store data from client
+
+```php
+ public function store()
+    {
+        // Request get from method post
+        $request = new UserRegistrationRequest();
+        $request->id = $_POST["id"];
+        $request->name = $_POST["name"];
+        $request->password = $_POST["password"];
+
+        // trying to call register service if it success then redirecting to user/login
+        // else render view register with error message from exception get message
+        try {
+            $this->userService->register($request);
+            // Redirect::to("/users/login");
+        } catch (ValidationException $exception) {
+            View::render("User/register", [
+                "title" => "Register User",
+                "error" => $exception->getMessage()
+            ]);
+        }
+    }
 ```
 
 ### Built By

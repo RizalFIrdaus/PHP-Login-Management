@@ -30,11 +30,14 @@ class UserController
 
     public function store()
     {
+        // Request get from method post
         $request = new UserRegistrationRequest();
         $request->id = $_POST["id"];
         $request->name = $_POST["name"];
         $request->password = $_POST["password"];
 
+        // trying to call register service if it success then redirecting to user/login
+        // else render view register with error message from exception get message
         try {
             $this->userService->register($request);
             // Redirect::to("/users/login");
