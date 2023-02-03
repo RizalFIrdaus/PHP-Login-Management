@@ -2,15 +2,18 @@
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\Service;
 
+use Exception;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Config\Database;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginRequest;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
 
 
-class UserRegistrationService
+class UserService
 {
     private UserRepository $userRepository;
 
@@ -61,6 +64,35 @@ class UserRegistrationService
         if (
             $request->id == null || $request->name == null || $request->password == null ||
             trim($request->id) == "" || trim($request->name) == "" || trim($request->password) == ""
+        ) {
+            throw new ValidationException("Id,name or password can't blank", 403);
+        } else if (strlen($request->id) <= 6 || strlen($request->password) <= 8) {
+            throw new ValidationException("Id can't less then 6 or Password can't less then 8", 403);
+        }
+    }
+
+    public function login(UserLoginRequest $request): UserLoginResponse
+    {
+        $this->validationUserLoginRequest($request);
+        $user = $this->userRepository->getById($request->id);
+        if ($user == null) {
+            throw new ValidationException("Id or password is wrong");
+        }
+
+        if (password_verify($request->password, $user->getPassword())) {
+            $response = new UserLoginResponse();
+            $response->user = $user;
+            return $response;
+        } else {
+            throw new ValidationException("Id or password is wrong");
+        }
+    }
+
+    public function validationUserLoginRequest(UserLoginRequest $request)
+    {
+        if (
+            $request->id == null || $request->password == null ||
+            trim($request->id) == "" || trim($request->password) == ""
         ) {
             throw new ValidationException("Id,name or password can't blank", 403);
         } else if (strlen($request->id) <= 6 || strlen($request->password) <= 8) {
