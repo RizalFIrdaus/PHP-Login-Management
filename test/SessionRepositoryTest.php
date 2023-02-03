@@ -28,4 +28,37 @@ class SessionRepositoryTest extends TestCase
         self::assertEquals($session->id, $result->id);
         self::assertEquals($session->user_id, $result->user_id);
     }
+
+    public function testGetByIdSuccess()
+    {
+        $session = new Session();
+        $session->id = uniqid();
+        $session->user_id = "rizal300500";
+        $this->sessionRepository->save($session);
+        $result = $this->sessionRepository->getById($session->id);
+        self::assertEquals($session->id, $result->id);
+        self::assertEquals($session->user_id, $result->user_id);
+    }
+
+    public function testGetByIdFailed()
+    {
+        $result = $this->sessionRepository->getById("Salah");
+        self::assertNull($result);
+    }
+
+    public function testDeleteByIdSuccess()
+    {
+        $session = new Session();
+        $session->id = uniqid();
+        $session->user_id = "rizal300500";
+        $this->sessionRepository->save($session);
+        $result = $this->sessionRepository->deleteById($session->id);
+        self::assertTrue($result);
+    }
+
+    public function testDeleteByIdFailed()
+    {
+        $result = $this->sessionRepository->deleteById("salah");
+        self::assertFalse($result);
+    }
 }

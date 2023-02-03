@@ -22,7 +22,7 @@ class SessionRepository
 
     public function getById(string $id): ?Session
     {
-        $statement = $this->connection->prepare("SELECT id FROM sessions WHERE id=?");
+        $statement = $this->connection->prepare("SELECT id,user_id FROM sessions WHERE id=?");
         $statement->execute([$id]);
         try {
             if ($row = $statement->fetch()) {
@@ -44,7 +44,7 @@ class SessionRepository
         $statement->execute([$id]);
         try {
             if ($statement->fetch()) {
-                $statement = $this->connection->prepare("DELETE id,user_id FROM sessions WHERE id=?");
+                $statement = $this->connection->prepare("DELETE FROM sessions WHERE id=?");
                 $statement->execute([$id]);
                 return true;
             } else {
