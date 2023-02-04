@@ -41,8 +41,7 @@ class UserRepositoryTest extends TestCase
     }
     public function testSaveFailed()
     {
-        $user = new User();
-        $response = $this->userRepository->save($user);
+        $response = $this->userRepository->save();
         self::assertNull($response);
     }
 

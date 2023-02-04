@@ -14,15 +14,17 @@ class SessionRepository
         $this->connection = $connection;
     }
 
-    public function save(Session $session): Session
+    public function save(?Session $session = null): ?Session
     {
+        if ($session == null) return null;
         $statement = $this->connection->prepare("INSERT INTO sessions (id,user_id) VALUES (?,?)");
         $statement->execute([$session->id, $session->user_id]);
         return $session;
     }
 
-    public function getById(string $id): ?Session
+    public function getById(?string $id = null): ?Session
     {
+        if ($id == null) return null;
         $statement = $this->connection->prepare("SELECT id,user_id FROM sessions WHERE id=?");
         $statement->execute([$id]);
         try {
@@ -39,8 +41,9 @@ class SessionRepository
         }
     }
 
-    public function deleteById(string $id): bool
+    public function deleteById(string $id = null): bool
     {
+        if ($id == null) return false;
         $statement = $this->connection->prepare("SELECT id FROM sessions WHERE id=?");
         $statement->execute([$id]);
         try {
