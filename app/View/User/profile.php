@@ -14,14 +14,11 @@
         <div class="col-md-10 mx-auto col-lg-5">
             <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/users/profile">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="id" placeholder="id" disabled value="<?= $model["user"]["id"] ?>">
-                    <label for="id">Id</label>
-                </div>
-                <div class="form-floating mb-3">
                     <input name="name" type="text" class="form-control" id="name" placeholder="name" value="<?= $model["user"]["name"] ?>">
                     <label for="name">Name</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Update Profile</button>
+                <a class="w-100 btn btn-lg btn-danger my-2" href="/">Back</a>
             </form>
         </div>
     </div>

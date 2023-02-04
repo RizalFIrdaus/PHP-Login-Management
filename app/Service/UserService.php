@@ -8,6 +8,8 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginResponse;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserProfileRequest;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserProfileResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
@@ -97,6 +99,39 @@ class UserService
             throw new ValidationException("Id,name or password can't blank", 403);
         } else if (strlen($request->id) <= 6 || strlen($request->password) <= 8) {
             throw new ValidationException("Id can't less then 6 or Password can't less then 8", 403);
+        }
+    }
+
+    public function updateProfile(UserProfileRequest $request): UserProfileResponse
+    {
+        $this->validationProfileRequest($request);
+        try {
+            Database::beginTrans();
+
+            $user = $this->userRepository->getById($request->id);
+            if ($user == null) {
+                throw new ValidationException("User not found !");
+            }
+            $user->setName($request->name);
+            $this->userRepository->update($user);
+            $response = new UserProfileResponse();
+            $response->user = $user;
+            Database::commitTrans();
+
+            return $response;
+        } catch (ValidationException $exception) {
+            Database::rollbackTrans();
+            throw $exception;
+        }
+    }
+
+    public function validationProfileRequest(UserProfileRequest $request)
+    {
+        if (
+            $request->id == null || $request->name == null
+            || trim($request->id) == "" || trim($request->name) == ""
+        ) {
+            throw new ValidationException("Name can't blank !");
         }
     }
 }

@@ -48,6 +48,13 @@ class UserRepository
         }
     }
 
+    public function update(User $user): User
+    {
+        $statement = $this->connection->prepare("UPDATE users SET name=? WHERE id=?");
+        $statement->execute([$user->getName(), $user->getId()]);
+        return $user;
+    }
+
     public function deleteAll(): void
     {
         $this->connection->exec("DELETE FROM users");
