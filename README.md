@@ -34,7 +34,61 @@ Dump-autoload is optional if your changes any autoload in composer.json
 
 ## Database
 
-This project is required mysql databases, to config database environment, you can open env folder then open _database.php_
+This project is required mysql databases, to config database environment, you can open env folder then open **database.php**
+To configure the database in the _getDataConfig_ function, if it is only used for production, the database used is _prod_. However, if you want to perform testing implementation, the configuration must also include the _test_ database
+
+```php
+"database" => [
+            "prod" => [
+                "url" => "mysql:host=localhost:3306;dbname=php_login_management",
+                "username" => "root",
+                "password" => ""
+            ],
+            "test" => [
+                "url" => "mysql:host=localhost:3306;dbname=php_login_management_test",
+                "username" => "root",
+                "password" => ""
+            ]
+        ]
+```
+
+### Query Create Database & Tables Prod&Test
+
+After configuration, you will need to create the database and tables that are appropriate for the scope of this project. Here is a query for executing SQL database for testing and production
+
+```sql
+CREATE DATABASE php_login_management;
+CREATE DATABASE php_login_management_test;
+
+CREATE TABLE users(
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+)
+CREATE TABLE sessions(
+    id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+)
+ALTER TABLE session
+ADD CONSTRAINT fk_session_user
+FOREIGN KEY (user_id)
+REFERENCES users(id);
+
+```
+
+### Running Project
+
+To run this project, the following steps can be followed:
+
+1. cd to project directory
+2. cd public folder
+3. serve server
+
+```php
+php S localhost:8080
+```
+
+The Project can run with port 8080 if your set port like step before
 
 # Roadmap
 
