@@ -89,16 +89,12 @@ class UserController
     public function profile()
     {
         $response = $this->sessionService->current();
-        if ($response != null) {
-            View::render("User/profile", [
-                "title" => "Profile",
-                "user" => [
-                    "id" => $response->getId(),
-                    "name" => $response->getName()
-                ]
-            ]);
-        } else {
-            Redirect::to("/");
-        }
+        View::render("User/profile", [
+            "title" => "Profile",
+            "user" => [
+                "id" => $response->getId(),
+                "name" => $response->getName()
+            ]
+        ]);
     }
 }
