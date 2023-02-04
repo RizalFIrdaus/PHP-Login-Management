@@ -76,7 +76,7 @@ REFERENCES users(id);
 
 ```
 
-### Running Project
+# Running Project
 
 To run this project, the following steps can be followed:
 
