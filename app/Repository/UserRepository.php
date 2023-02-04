@@ -60,18 +60,15 @@ class UserRepository
 
     public function update(?User $user): ?User
     {
-        // $id = $user->getId();
-        // $name = $user->getName();
-        // $password = $user->getPassword();
         if ($user == null) return null;
-
         $statement = $this->connection->prepare("UPDATE users SET name=? WHERE id=?");
         $statement->execute([$user->getName(), $user->getId()]);
         return $user;
     }
 
-    public function updatePassword(User $user): User
+    public function updatePassword(?User $user): ?User
     {
+        if ($user == null) return null;
         $statement = $this->connection->prepare("UPDATE users SET password=? WHERE id=?");
         $statement->execute([$user->getPassword(), $user->getId()]);
         return $user;

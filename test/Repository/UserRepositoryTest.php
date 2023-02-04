@@ -76,6 +76,9 @@ class UserRepositoryTest extends TestCase
         // Update by identity user
         $response = $this->userRepository->update($id);
         self::assertNotNull($response);
+        self::assertEquals($this->user->getId(), $response->getId());
+        self::assertEquals($this->user->getName(), $response->getName());
+        self::assertEquals($this->user->getPassword(), $response->getPassword());
     }
     public function testUpdateProfileIdNotFound()
     {
@@ -83,5 +86,25 @@ class UserRepositoryTest extends TestCase
         // Update by identity user
         $response = $this->userRepository->update($id);
         self::assertNull($response);
+    }
+
+    public function testUpdatePasswordIdNotFound()
+    {
+        $id = $this->userRepository->getById("Wrong Id");
+        $response = $this->userRepository->updatePassword($id);
+        self::assertNull($response);
+    }
+
+    public function testUpdatePasswordSuccess()
+    {
+        // Create user
+        $this->userRepository->save($this->user);
+        // Get Identity User
+        $id = $this->userRepository->getById($this->user->getId());
+        $response = $this->userRepository->updatePassword($id);
+        self::assertNotNull($response);
+        self::assertEquals($this->user->getId(), $response->getId());
+        self::assertEquals($this->user->getName(), $response->getName());
+        self::assertEquals($this->user->getPassword(), $response->getPassword());
     }
 }
