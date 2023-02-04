@@ -8,6 +8,8 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginResponse;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserPasswordRequest;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserPasswordResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserProfileRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserProfileResponse;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
@@ -132,6 +134,45 @@ class UserService
             || trim($request->id) == "" || trim($request->name) == ""
         ) {
             throw new ValidationException("Name can't blank !");
+        }
+    }
+
+    public function updatePassword(UserPasswordRequest $request): UserPasswordResponse
+    {
+        $this->validationPasswordRequest($request);
+        try {
+            Database::beginTrans();
+
+            $user = $this->userRepository->getById($request->id);
+            if ($user == null) {
+                throw new ValidationException("User Not Found !");
+            }
+            if (password_verify($user->getPassword(), $request->oldPassword)) {
+                $user->setPassword($request->newPassword);
+                $this->userRepository->updatePassword($user);
+                $response = new UserPasswordResponse();
+                $response->user = $user;
+                return $response;
+            } else {
+                throw new ValidationException("Old Password not match");
+            }
+
+            Database::commitTrans();
+        } catch (ValidationException $exception) {
+            Database::rollbackTrans();
+            throw $exception;
+        }
+    }
+
+    public function validationPasswordRequest(UserPasswordRequest $request)
+    {
+        if (
+            $request->oldPassword == null || $request->newPassword == null
+            || trim($request->oldPassword) == "" || trim($request->newPassword) == ""
+        ) {
+            throw new ValidationException("Old or new password can't blank !");
+        } else if (strlen($request->newPassword) <= 8) {
+            throw new ValidationException("Password can't less then 8", 403);
         }
     }
 }

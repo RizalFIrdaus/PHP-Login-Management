@@ -10,7 +10,7 @@
         <div class="col-lg-7 text-center text-lg-start">
             <h1 class="display-4 fw-bold lh-1 mb-3">Register</h1>
             <p class="col-lg-10 fs-4">by <a target="_blank" href="https://github.com/RizalFIrdaus">Muhammad Rizal Firdaus</a></p>
-            <a class="btn btn-lg btn-secondary my-2" href="/">Home</a>
+            <a class="btn btn-lg btn-secondary my-2" ~href="/">Home</a>
 
         </div>
         <div class="col-md-10 mx-auto col-lg-5">

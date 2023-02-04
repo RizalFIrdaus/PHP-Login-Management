@@ -55,6 +55,13 @@ class UserRepository
         return $user;
     }
 
+    public function updatePassword(User $user): User
+    {
+        $statement = $this->connection->prepare("UPDATE users SET password=? WHERE id=?");
+        $statement->execute([$user->getPassword(), $user->getId()]);
+        return $user;
+    }
+
     public function deleteAll(): void
     {
         $this->connection->exec("DELETE FROM users");

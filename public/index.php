@@ -19,5 +19,6 @@ Router::add('POST', '/users/login', UserController::class, 'postLogin', [Already
 Router::add('GET', '/users/logout', UserController::class, 'logout', [MustLoginMiddleware::class]);
 Router::add('GET', '/users/profile', UserController::class, 'profile', [MustLoginMiddleware::class]);
 Router::add('POST', '/users/profile', UserController::class, 'postProfile', [MustLoginMiddleware::class]);
+Router::add('GET', '/users/password', UserController::class, 'password', [MustLoginMiddleware::class]);
 
 Router::run();

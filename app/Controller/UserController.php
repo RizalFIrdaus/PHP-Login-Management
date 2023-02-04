@@ -119,4 +119,17 @@ class UserController
             ]);
         }
     }
+
+    public function password()
+    {
+        $response = $this->sessionService->current();
+
+        View::render("User/password", [
+            "title" => "Change Password",
+            "user" => [
+                "id" => $response->getId(),
+                "name" => $response->getName()
+            ]
+        ]);
+    }
 }
