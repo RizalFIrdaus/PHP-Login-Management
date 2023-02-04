@@ -3,6 +3,39 @@
 > About
 > The results of learning the basics of PHP programming language, object-oriented programming (OOP), unit testing, web PHP, Composer, MVC, logging, and software development architecture techniques have been documented in this case study for learning purposes only
 
+# How to install the project
+
+Create project via composer
+
+```shell
+composer create-project rizal/management-login
+```
+
+If your not have composer, u can create project via github clone
+
+```shell
+git clone https://github.com/RizalFIrdaus/PHP-Login-Management.git
+```
+
+If your not have git on your local computer, you can download manually in github (Download ZIP)
+
+# Setup
+
+## Dependency Composer
+
+After installing the project, you may have this project without vendor dependency, insert dependency like down below
+
+```shell
+composer install
+composer dump-autoload
+```
+
+Dump-autoload is optional if your changes any autoload in composer.json
+
+## Database
+
+This project is required mysql databases, to config database environment, you can open env folder then open _database.php_
+
 # Roadmap
 
 - [PHP-Login-Management](#login-management-architecture-mvc---repository-pattern)
