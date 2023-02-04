@@ -4,20 +4,20 @@ namespace ProgrammerZamanNow\Belajar\PHP\MVC\Domain;
 
 class User
 {
-    private string $id;
-    private string $name;
-    private string $password;
+    private ?string $id = null;
+    private ?string $name = null;
+    private ?string $password = null;
 
     // SETTER AND GETTER
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
