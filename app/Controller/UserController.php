@@ -8,18 +8,23 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Config\Database;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\SessionRepository;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Service\SessionService;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Service\UserService;
 
 class UserController
 {
     private UserService $userService;
+    private SessionService $sessionService;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
-        $connection = Database::getConnection();
-        $repository = new UserRepository($connection);
-        $this->userService = new UserService($repository);
+        $this->userRepository = new UserRepository(Database::getConnection());
+        $this->userService = new UserService($this->userRepository);
+        $sessionRepository = new SessionRepository(Database::getConnection());
+        $this->sessionService = new SessionService($sessionRepository, $this->userRepository);
     }
 
     public function register()
@@ -64,13 +69,36 @@ class UserController
         $request->password = $_POST["password"];
 
         try {
-            $this->userService->login($request);
+            $response = $this->userService->login($request);
+            $this->sessionService->create($response->user->getId());
             Redirect::to("/");
         } catch (ValidationException $exception) {
             View::render("User/login", [
                 "title" => "Login User",
                 "error" => $exception->getMessage()
             ]);
+        }
+    }
+
+    public function logout()
+    {
+        $this->sessionService->destroy();
+        Redirect::to("/");
+    }
+
+    public function profile()
+    {
+        $response = $this->sessionService->current();
+        if ($response != null) {
+            View::render("User/profile", [
+                "title" => "Profile",
+                "user" => [
+                    "id" => $response->getId(),
+                    "name" => $response->getName()
+                ]
+            ]);
+        } else {
+            Redirect::to("/");
         }
     }
 }

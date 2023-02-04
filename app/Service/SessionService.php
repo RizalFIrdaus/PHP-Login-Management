@@ -7,10 +7,6 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\SessionRepository;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\UserRepository;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 
-function setcookie(string $name, string $value)
-{
-    echo "$name : $value";
-}
 class SessionService
 {
     public static string $COOKIE_NAME = "X-RIZAL-SESSION";
