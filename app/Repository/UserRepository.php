@@ -20,9 +20,7 @@ class UserRepository
         $id = $user->getId();
         $name = $user->getName();
         $password = $user->getPassword();
-        if ($id == null || $name == null || $password == null) {
-            return null;
-        }
+        if ($id == null || $name == null || $password == null) return null;
         try {
             $statement = $this->connection->prepare("INSERT INTO users(id,name,password) VALUES (?,?,?)");
             $statement->execute([
@@ -52,14 +50,21 @@ class UserRepository
             } else {
                 return null;
             }
+        } catch (\PDOException $exception) {
+            throw $exception->getMessage();
         } finally {
             // Close Query
             $statement->closeCursor();
         }
     }
 
-    public function update(User $user): User
+    public function update(?User $user): ?User
     {
+        // $id = $user->getId();
+        // $name = $user->getName();
+        // $password = $user->getPassword();
+        if ($user == null) return null;
+
         $statement = $this->connection->prepare("UPDATE users SET name=? WHERE id=?");
         $statement->execute([$user->getName(), $user->getId()]);
         return $user;
