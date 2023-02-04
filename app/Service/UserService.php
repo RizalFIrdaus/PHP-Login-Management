@@ -147,17 +147,20 @@ class UserService
             if ($user == null) {
                 throw new ValidationException("User Not Found !");
             }
-            if (password_verify($user->getPassword(), $request->oldPassword)) {
-                $user->setPassword($request->newPassword);
+            if (password_verify($request->newPassword, $user->getPassword())) {
+                throw new ValidationException("New password not be same !");
+            }
+            if (password_verify($request->oldPassword, $user->getPassword())) {
+                $user->setPassword(password_hash($request->newPassword, PASSWORD_BCRYPT));
                 $this->userRepository->updatePassword($user);
                 $response = new UserPasswordResponse();
                 $response->user = $user;
+                Database::commitTrans();
+
                 return $response;
             } else {
                 throw new ValidationException("Old Password not match");
             }
-
-            Database::commitTrans();
         } catch (ValidationException $exception) {
             Database::rollbackTrans();
             throw $exception;

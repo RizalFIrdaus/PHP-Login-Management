@@ -7,6 +7,7 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\App\Redirect;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Config\Database;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Exception\ValidationException;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserLoginRequest;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserPasswordRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserProfileRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Model\UserRegistrationRequest;
 use ProgrammerZamanNow\Belajar\PHP\MVC\Repository\SessionRepository;
@@ -131,5 +132,28 @@ class UserController
                 "name" => $response->getName()
             ]
         ]);
+    }
+
+    public function postPassword()
+    {
+        $response = $this->sessionService->current();
+        $request = new UserPasswordRequest();
+        $request->id = $response->getId();
+        $request->oldPassword = $_POST["oldPassword"];
+        $request->newPassword = $_POST["newPassword"];
+        try {
+            $this->userService->updatePassword($request);
+            Redirect::to("/");
+        } catch (ValidationException $exception) {
+            View::render("User/password", [
+                "title" => "Change Password",
+                "error" => $exception->getMessage(),
+                "user" => [
+                    "id" => $response->getId(),
+                    "newPassword" => $_POST["newPassword"],
+                    "oldPassword" => $_POST["oldPassword"]
+                ]
+            ]);
+        }
     }
 }
