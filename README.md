@@ -69,7 +69,7 @@ CREATE TABLE sessions(
     id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
 )
-ALTER TABLE session
+ALTER TABLE sessions
 ADD CONSTRAINT fk_session_user
 FOREIGN KEY (user_id)
 REFERENCES users(id);
@@ -78,14 +78,10 @@ REFERENCES users(id);
 
 # Running Project
 
-To run this project, the following steps can be followed:
-
-1. cd to project directory
-2. cd public folder
-3. serve server
+To run this project :
 
 ```php
-php S localhost:8080
+php S localhost:8080 -t public
 ```
 
 The Project can run with port 8080 if your set port like step before
