@@ -81,7 +81,7 @@ REFERENCES users(id);
 To run this project :
 
 ```php
-php S localhost:8080 -t public
+php -S localhost:8080 -t public
 ```
 
 The Project can run with port 8080 if your set port like step before
