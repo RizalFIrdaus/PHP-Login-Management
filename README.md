@@ -1,4 +1,4 @@
-# Login Management (Architecture MVC - Repository Pattern)
+# Login Management (Architecture MVC - Repository Pattern - Facades Pattern - Singleton Pattern)
 
 > About
 > The results of learning the basics of PHP programming language, object-oriented programming (OOP), unit testing, web PHP, Composer, MVC, logging, and software development architecture techniques have been documented in this case study for learning purposes only
