@@ -31,7 +31,7 @@ class HomeController
             View::render("Home/dashboard", [
                 "title" => "Dashboard",
                 "user" => [
-                    "name" => $response->getName()
+                    "name" => $response->username
                 ]
             ]);
         }

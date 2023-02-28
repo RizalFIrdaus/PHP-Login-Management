@@ -94,8 +94,8 @@ class UserController
         View::render("User/profile", [
             "title" => "Profile",
             "user" => [
-                "id" => $response->getId(),
-                "name" => $response->getName()
+                "id" => $response->session_id,
+                "name" => $response->username
             ]
         ]);
     }
@@ -104,7 +104,7 @@ class UserController
     {
         $response = $this->sessionService->current();
         $request = new UserProfileRequest();
-        $request->id = $response->getId();
+        $request->id = $response->session_id;
         $request->name = $_POST["name"];
         try {
             $this->userService->updateProfile($request);
@@ -114,7 +114,7 @@ class UserController
                 "title" => "Profile",
                 "error" => $exception->getMessage(),
                 "user" => [
-                    "id" => $response->getId(),
+                    "id" => $response->session_id,
                     "name" => $_POST["name"]
                 ]
             ]);
@@ -128,8 +128,8 @@ class UserController
         View::render("User/password", [
             "title" => "Change Password",
             "user" => [
-                "id" => $response->getId(),
-                "name" => $response->getName()
+                "id" => $response->session_id,
+                "name" => $response->username
             ]
         ]);
     }
@@ -138,7 +138,7 @@ class UserController
     {
         $response = $this->sessionService->current();
         $request = new UserPasswordRequest();
-        $request->id = $response->getId();
+        $request->id = $response->session_id;
         $request->oldPassword = $_POST["oldPassword"];
         $request->newPassword = $_POST["newPassword"];
         try {
@@ -149,7 +149,7 @@ class UserController
                 "title" => "Change Password",
                 "error" => $exception->getMessage(),
                 "user" => [
-                    "id" => $response->getId(),
+                    "id" => $response->session_id,
                     "newPassword" => $_POST["newPassword"],
                     "oldPassword" => $_POST["oldPassword"]
                 ]
